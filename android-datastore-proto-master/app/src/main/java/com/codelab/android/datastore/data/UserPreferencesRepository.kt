@@ -42,55 +42,12 @@ class UserPreferencesRepository private constructor(context: Context) {
 
     private val TAG: String = "UserPreferencesRepo"
 
-    private val sharedPreferences =
-        context.applicationContext.getSharedPreferences(USER_PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-    // Keep the sort order as a stream of changes
-    private val _sortOrderFlow = MutableStateFlow(sortOrder)
-    val sortOrderFlow: StateFlow<SortOrder> = _sortOrderFlow
-
-    /**
-     * Get the sort order. By default, sort order is None.
-     */
-    private val sortOrder: SortOrder
-        get() {
-            val order = sharedPreferences.getString(SORT_ORDER_KEY, SortOrder.NONE.name)
-            return SortOrder.valueOf(order ?: SortOrder.NONE.name)
-        }
-    private fun updateSortOrder(sortOrder: SortOrder) {
-        sharedPreferences.edit {
-            putString(SORT_ORDER_KEY, sortOrder.name)
-        }
-    }
     suspend fun updateShowCompleted(completed: Boolean) {
         dataStore.updateData { preferences ->
             preferences.toBuilder().setShowCompleted(completed).build()
         }
     }
-    private fun filterSortTasks(
-        tasks: List<Task>,
-        showCompleted: Boolean,
-        sortOrder: SortOrder
-    ): List<Task> {
-        // filter the tasks
-        val filteredTasks = if (showCompleted) {
-            tasks
-        } else {
-            tasks.filter { !it.completed }
-        }
-        // sort the tasks
-        return when (sortOrder) {
-            SortOrder.UNSPECIFIED -> filteredTasks
-            SortOrder.NONE -> filteredTasks
-            SortOrder.BY_DEADLINE -> filteredTasks.sortedByDescending { it.deadline }
-            SortOrder.BY_PRIORITY -> filteredTasks.sortedBy { it.priority }
-            SortOrder.BY_DEADLINE_AND_PRIORITY -> filteredTasks.sortedWith(
-                compareByDescending<Task> { it.deadline }.thenBy { it.priority }
-            )
-            // We shouldn't get any other values
-            else -> throw UnsupportedOperationException("$sortOrder not supported")
-        }
-    }
+
     private val sharedPrefsMigration = SharedPreferencesMigration(
         context,
         USER_PREFERENCES_NAME

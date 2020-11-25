@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.codelab.android.datastore.UserPreferences.SortOrder
+import com.codelab.android.datastore.data.StartCountRepository
 import com.codelab.android.datastore.data.TasksRepository
 import com.codelab.android.datastore.data.UserPreferencesRepository
 import com.codelab.android.datastore.databinding.ActivityTasksBinding
@@ -41,7 +42,7 @@ class TasksActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            TasksViewModelFactory(TasksRepository, UserPreferencesRepository.getInstance(this))
+            TasksViewModelFactory(TasksRepository, UserPreferencesRepository.getInstance(this), StartCountRepository.getInstance(this))
         ).get(TasksViewModel::class.java)
 
         setupRecyclerView()
@@ -53,6 +54,8 @@ class TasksActivity : AppCompatActivity() {
             updateSort(tasksUiModel.sortOrder)
             binding.showCompletedSwitch.isChecked = tasksUiModel.showCompleted
         }
+
+        viewModel.incrementStartCount()
     }
 
     private fun setupFilterListeners(viewModel: TasksViewModel) {

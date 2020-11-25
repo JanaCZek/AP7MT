@@ -19,3 +19,7 @@ message UserPreferences {
   // user selected tasks sorting order
   SortOrder sort_order = 2;
 }
+
+message StartCount {
+  int32 value = 1;
+}

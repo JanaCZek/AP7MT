@@ -22,6 +22,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.codelab.android.datastore.UserPreferences
 import com.codelab.android.datastore.UserPreferences.SortOrder
+import com.codelab.android.datastore.data.StartCountRepository
 import com.codelab.android.datastore.data.Task
 import com.codelab.android.datastore.data.TasksRepository
 import com.codelab.android.datastore.data.UserPreferencesRepository
@@ -38,10 +39,12 @@ data class TasksUiModel(
 // MutableStateFlow is an experimental API so we're annotating the class accordingly
 class TasksViewModel(
     repository: TasksRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val startCountRepository: StartCountRepository
 ) : ViewModel() {
 
     private val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
+    private val startCountFlow = startCountRepository.startCountFlow
 
     // Every time the sort order, the show completed filter or the list of tasks emit,
     // we should recreate the list of tasks
@@ -106,17 +109,23 @@ class TasksViewModel(
         }
     }
 
+    fun incrementStartCount(){
+        viewModelScope.launch {
+            startCountRepository.incrementStartCount()
+        }
+    }
 }
 
 class TasksViewModelFactory(
     private val repository: TasksRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val startCountRepository: StartCountRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TasksViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return TasksViewModel(repository, userPreferencesRepository) as T
+            return TasksViewModel(repository, userPreferencesRepository, startCountRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

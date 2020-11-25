@@ -108,6 +108,7 @@
                 android:checkable="true"
                 android:text="@string/deadline"
                 app:chipBackgroundColor="?attr/colorSecondary" />
+
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
