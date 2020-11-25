@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.datastore.DataStore
 import androidx.datastore.createDataStore
+import androidx.datastore.migrations.SharedPreferencesMigration
+import androidx.datastore.migrations.SharedPreferencesView
+import androidx.lifecycle.asLiveData
 import com.codelab.android.datastore.StartCount
 import com.codelab.android.datastore.UserPreferences
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.*
 import java.io.IOException
 
 private const val START_COUNT_NAME = "start_count"
@@ -18,8 +20,7 @@ class StartCountRepository private constructor(context: Context){
 
     private val dataStore: DataStore<StartCount> = context.createDataStore(
         fileName = "user_prefs.pb",
-        serializer = StartCountSerializer  //,
-        //migrations = listOf(sharedPrefsMigration)
+        serializer = StartCountSerializer
     )
 
     val startCountFlow: Flow<StartCount> = dataStore.data
@@ -35,9 +36,7 @@ class StartCountRepository private constructor(context: Context){
 
     suspend fun incrementStartCount(){
         dataStore.updateData { startCount ->
-            var currentCount : Int = startCount.value
-
-            startCount.toBuilder().setValue(currentCount++).build()
+            startCount.toBuilder().setValue(startCount.value + 1).build()
         }
     }
 

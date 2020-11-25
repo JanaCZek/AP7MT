@@ -3,7 +3,6 @@ package com.codelab.android.datastore.data
 import androidx.datastore.CorruptionException
 import androidx.datastore.Serializer
 import com.codelab.android.datastore.StartCount
-import com.codelab.android.datastore.UserPreferences
 import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream

@@ -49,13 +49,14 @@ class TasksActivity : AppCompatActivity() {
         setupFilterListeners(viewModel)
         setupSort()
 
-        viewModel.incrementStartCount()
-
         viewModel.tasksUiModel.observe(owner = this) { tasksUiModel ->
             adapter.submitList(tasksUiModel.tasks)
             updateSort(tasksUiModel.sortOrder)
             binding.showCompletedSwitch.isChecked = tasksUiModel.showCompleted
+            binding.startCountValue.text = tasksUiModel.startCount.toString()
         }
+
+        viewModel.incrementStartCount()
     }
 
     private fun setupFilterListeners(viewModel: TasksViewModel) {

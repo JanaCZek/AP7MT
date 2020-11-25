@@ -24,13 +24,9 @@ import androidx.datastore.createDataStore
 import androidx.datastore.migrations.SharedPreferencesMigration
 import androidx.datastore.migrations.SharedPreferencesView
 import com.codelab.android.datastore.UserPreferences
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import java.io.IOException
 import com.codelab.android.datastore.UserPreferences.SortOrder
-
+import kotlinx.coroutines.flow.*
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 private const val SORT_ORDER_KEY = "sort_order"

@@ -16,10 +16,12 @@
 
 package com.codelab.android.datastore.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.codelab.android.datastore.StartCount
 import com.codelab.android.datastore.UserPreferences
 import com.codelab.android.datastore.UserPreferences.SortOrder
 import com.codelab.android.datastore.data.StartCountRepository
@@ -28,12 +30,16 @@ import com.codelab.android.datastore.data.TasksRepository
 import com.codelab.android.datastore.data.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 data class TasksUiModel(
     val tasks: List<Task>,
     val showCompleted: Boolean,
-    val sortOrder: SortOrder
+    val sortOrder: SortOrder,
+    val startCount: Int
 )
 
 // MutableStateFlow is an experimental API so we're annotating the class accordingly
@@ -50,8 +56,9 @@ class TasksViewModel(
     // we should recreate the list of tasks
     private val tasksUiModelFlow = combine(
         repository.tasks,
-        userPreferencesFlow
-    ) { tasks: List<Task>, userPreferences: UserPreferences ->
+        userPreferencesFlow,
+        startCountFlow
+    ) { tasks: List<Task>, userPreferences: UserPreferences, startCount: StartCount ->
         return@combine TasksUiModel(
             tasks = filterSortTasks(
                 tasks,
@@ -59,7 +66,8 @@ class TasksViewModel(
                 userPreferences.sortOrder
             ),
             showCompleted = userPreferences.showCompleted,
-            sortOrder = userPreferences.sortOrder
+            sortOrder = userPreferences.sortOrder,
+            startCount = startCount.value
         )
     }
 
