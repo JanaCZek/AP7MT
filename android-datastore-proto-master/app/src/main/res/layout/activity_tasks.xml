@@ -88,7 +88,7 @@
             app:tint="?attr/colorOnSurface" />
 
         <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/row_item_margin_horizontal"
             app:singleLine="true">
@@ -108,7 +108,14 @@
                 android:checkable="true"
                 android:text="@string/deadline"
                 app:chipBackgroundColor="?attr/colorSecondary" />
-
         </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/start_count_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/black"
+            android:visibility="visible"></TextView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
