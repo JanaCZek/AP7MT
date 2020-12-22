@@ -24,7 +24,7 @@ private val retrofit = Retrofit.Builder()
 interface MoviesApiService {
 
     @GET("?apikey=$API_KEY")
-    fun getMovieByTitle(@Query("t") title: String) : Call<Movie>
+    fun getMovieByTitle(@Query("t") title: String?) : Call<Movie>
 }
 object MoviesApi {
     val retrofitService : MoviesApiService by lazy {

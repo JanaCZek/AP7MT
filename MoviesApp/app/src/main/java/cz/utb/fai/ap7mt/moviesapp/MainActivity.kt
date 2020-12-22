@@ -17,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        MoviesApi.retrofitService.getMovieByTitle("Tenet").enqueue(
+
+        /*MoviesApi.retrofitService.getMovieByTitle("Tenet").enqueue(
             object: Callback<Movie> {
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
                     findViewById<TextView>(R.id.response).text = t.message
@@ -30,6 +31,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-        )
+        )*/
     }
 }
