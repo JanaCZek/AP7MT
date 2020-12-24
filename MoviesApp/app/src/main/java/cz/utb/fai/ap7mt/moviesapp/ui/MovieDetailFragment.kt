@@ -28,5 +28,4 @@ class MovieDetailFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
         // TODO: Use the ViewModel
     }
-
 }

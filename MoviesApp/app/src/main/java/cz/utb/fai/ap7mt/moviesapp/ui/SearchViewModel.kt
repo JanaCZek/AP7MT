@@ -23,6 +23,10 @@ class SearchViewModel : ViewModel() {
     val director: LiveData<String?>
         get() = _director
 
+    private val _runtime = MutableLiveData<String?>()
+    val runtime: LiveData<String?>
+        get() = _runtime
+
     init {
         _title.value = "ABCD"
     }

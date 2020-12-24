@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.utb.fai.ap7mt.moviesapp.network.Movie
 import cz.utb.fai.ap7mt.moviesapp.network.MoviesApi
 import retrofit2.Call
@@ -16,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         /*MoviesApi.retrofitService.getMovieByTitle("Tenet").enqueue(
             object: Callback<Movie> {

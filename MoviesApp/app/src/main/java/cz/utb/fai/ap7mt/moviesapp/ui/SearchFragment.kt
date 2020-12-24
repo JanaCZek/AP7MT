@@ -40,4 +40,13 @@ class SearchFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    private fun showMovieDetail() {
+        val action = SearchFragmentDirections.actionSearchFragmentToMovieDetailFragment(
+                viewModel.title.value?:"abcd",
+                viewModel.director.value?:"abcd",
+                viewModel.year.value?:"abcd",
+                viewModel.runtime.value?:"abcd"
+        )
+        findNavController().navigate(action)
+    }
 }
