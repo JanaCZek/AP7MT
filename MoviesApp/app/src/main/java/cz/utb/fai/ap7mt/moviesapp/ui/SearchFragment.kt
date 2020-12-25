@@ -29,7 +29,8 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.searchButton.setOnClickListener {
-            viewModel.searchMovie()
+            //viewModel.searchMovie()
+            showMovieDetail()
         }
         return binding.root
     }

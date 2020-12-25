@@ -8,4 +8,6 @@
     <string name="runtimeLabel">Runtime</string>
     <string name="releasedLabel">Released</string>
     <string name="searchText">Search</string>
+    <string name="overviewText">Overview</string>
+    <string name="titleFormat">%1s (%2s)</string>
 </resources>

@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20sp"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="@{@string/titleFormat(viewModel.title, viewModel.year)}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +44,8 @@
                     android:id="@+id/directorName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3" />
+                    android:layout_weight="3"
+                    android:text="@{viewModel.director}"/>
             </LinearLayout>
 
             <LinearLayout
@@ -63,7 +65,8 @@
                     android:id="@+id/releasedDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3" />
+                    android:layout_weight="3"
+                    android:text="@{viewModel.released}"/>
 
             </LinearLayout>
 
@@ -84,7 +87,8 @@
                     android:id="@+id/runtimeValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3" />
+                    android:layout_weight="3"
+                    android:text="@{viewModel.runtime}"/>
             </LinearLayout>
 
 
@@ -94,7 +98,14 @@
             android:id="@+id/plotText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10" />
+            android:layout_weight="10"
+            android:text="@{viewModel.plot}"/>
+
+        <Button
+            android:id="@+id/overviewButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/overviewText" />
 
     </LinearLayout>
 </layout>

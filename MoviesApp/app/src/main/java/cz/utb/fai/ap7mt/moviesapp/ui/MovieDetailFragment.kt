@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import cz.utb.fai.ap7mt.moviesapp.R
 import cz.utb.fai.ap7mt.moviesapp.databinding.MovieDetailFragmentBinding
 
@@ -40,7 +41,11 @@ class MovieDetailFragment : Fragment() {
         binding.viewModel = viewModel
 
         binding.lifecycleOwner = viewLifecycleOwner
-        
+
+        binding.overviewButton.setOnClickListener {
+            showOverview()
+        }
+
         return binding.root
     }
 
@@ -48,5 +53,10 @@ class MovieDetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    fun showOverview(){
+        val action = MovieDetailFragmentDirections.actionMovieDetailFragmentToOverviewFragment()
+        findNavController().navigate(action)
     }
 }

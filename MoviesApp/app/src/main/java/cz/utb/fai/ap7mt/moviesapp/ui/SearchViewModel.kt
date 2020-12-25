@@ -31,8 +31,10 @@ class SearchViewModel : ViewModel() {
         _title.value = "ABCD"
     }
 
-    fun searchMovie()
+    fun searchMovie() : Movie?
     {
+        var movie: Movie? = null
+
         MoviesApi.retrofitService.getMovieByTitle(title.value).enqueue(
             object: Callback<Movie> {
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
@@ -42,10 +44,12 @@ class SearchViewModel : ViewModel() {
                 override fun onResponse(call: Call<Movie>,
                                         response: Response<Movie>
                 ) {
-                    //findViewById<TextView>(R.id.response).text = response.body()?.director
+                    movie = response.body()
                 }
 
             }
         )
+
+        return movie
     }
 }
