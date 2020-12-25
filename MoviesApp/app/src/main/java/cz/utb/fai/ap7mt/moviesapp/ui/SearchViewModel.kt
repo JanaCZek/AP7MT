@@ -12,23 +12,18 @@ import retrofit2.Response
 class SearchViewModel : ViewModel() {
 
     private val _title = MutableLiveData<String>()
-    val title: LiveData<String>
+    var title: MutableLiveData<String>
         get() = _title
+        set(value) { _title.value = value.value }
 
     private val _year = MutableLiveData<String?>()
-    val year: LiveData<String?>
+    var year: MutableLiveData<String?>
         get() = _year
-
-    private val _director = MutableLiveData<String?>()
-    val director: LiveData<String?>
-        get() = _director
-
-    private val _runtime = MutableLiveData<String?>()
-    val runtime: LiveData<String?>
-        get() = _runtime
+        set(value) { _year.value = value.value }
 
     init {
-        _title.value = "ABCD"
+        _title.value = ""
+        _year.value = ""
     }
 
     fun searchMovie() : Movie?

@@ -10,4 +10,5 @@
     <string name="searchText">Search</string>
     <string name="overviewText">Overview</string>
     <string name="titleFormat">%1s (%2s)</string>
+    <string name="titleRequiredText">Title of movie is required</string>
 </resources>
