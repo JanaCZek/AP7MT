@@ -45,7 +45,9 @@ class SearchFragment : Fragment() {
                 viewModel.title.value?:"abcd",
                 viewModel.director.value?:"abcd",
                 viewModel.year.value?:"abcd",
-                viewModel.runtime.value?:"abcd"
+                viewModel.runtime.value?:"abcd",
+                "abcd",
+                "abcdedfg"
         )
         findNavController().navigate(action)
     }

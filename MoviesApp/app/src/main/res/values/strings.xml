@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="titleLabel">Title</string>
-    <string name="yearLabel">Year (optional)</string>
-    <string name="directorLabel">Director (optional)</string>
+    <string name="yearOptionalLabel">Year (optional)</string>
+    <string name="yearLabel">Year</string>
+    <string name="directorOptionalLabel">Director (optional)</string>
+    <string name="directorLabel">Director</string>
+    <string name="runtimeLabel">Runtime</string>
+    <string name="releasedLabel">Released</string>
     <string name="searchText">Search</string>
 </resources>

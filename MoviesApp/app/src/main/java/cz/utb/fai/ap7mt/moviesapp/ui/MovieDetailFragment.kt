@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import cz.utb.fai.ap7mt.moviesapp.R
+import cz.utb.fai.ap7mt.moviesapp.databinding.MovieDetailFragmentBinding
 
 class MovieDetailFragment : Fragment() {
 
@@ -14,13 +16,32 @@ class MovieDetailFragment : Fragment() {
         fun newInstance() = MovieDetailFragment()
     }
 
+    private lateinit var binding: MovieDetailFragmentBinding
+    private lateinit var viewModelFactory: MovieDetailViewModelFactory
     private lateinit var viewModel: MovieDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.movie_detail_fragment, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.movie_detail_fragment, container, false)
+
+        val movieDetailArgs = MovieDetailFragmentArgs.fromBundle(requireArguments())
+        viewModelFactory = MovieDetailViewModelFactory(
+                movieDetailArgs.title,
+                movieDetailArgs.year,
+                movieDetailArgs.director,
+                movieDetailArgs.runtime,
+                movieDetailArgs.released,
+                movieDetailArgs.plot
+        )
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieDetailViewModel::class.java)
+        binding.viewModel = viewModel
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

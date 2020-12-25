@@ -34,7 +34,7 @@
             android:id="@+id/yearLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/yearLabel"
+            android:text="@string/yearOptionalLabel"
             android:textSize="20sp" />
 
         <EditText
@@ -49,7 +49,7 @@
             android:id="@+id/directorLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/directorLabel"
+            android:text="@string/directorOptionalLabel"
             android:textSize="20sp" />
 
         <EditText
