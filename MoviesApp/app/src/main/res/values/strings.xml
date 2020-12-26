@@ -8,7 +8,7 @@
     <string name="runtimeLabel">Runtime</string>
     <string name="releasedLabel">Released</string>
     <string name="searchText">Search</string>
-    <string name="overviewText">Overview</string>
+    <string name="overviewText">Back to overview</string>
     <string name="titleFormat">%1s (%2s)</string>
     <string name="titleRequiredText">Title of movie is required</string>
 </resources>

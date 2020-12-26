@@ -9,5 +9,6 @@ data class Movie (
     @Json(name = "Released") val released: String,
     @Json(name = "Runtime") val runtime: String,
     @Json(name = "Director") val director: String,
-    @Json(name = "Plot") val plot: String
+    @Json(name = "Plot") val plot: String,
+    @Json(name = "Response") val response: String
         )

@@ -25,6 +25,8 @@ interface MoviesApiService {
 
     @GET("?apikey=$API_KEY")
     fun getMovieByTitle(@Query("t") title: String?) : Call<Movie>
+    @GET("?apikey=$API_KEY")
+    fun getMovieByTitleAndYear(@Query("t") title: String?, @Query("y") year: String?) : Call<Movie>
 }
 object MoviesApi {
     val retrofitService : MoviesApiService by lazy {

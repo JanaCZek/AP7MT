@@ -25,26 +25,4 @@ class SearchViewModel : ViewModel() {
         _title.value = ""
         _year.value = ""
     }
-
-    fun searchMovie() : Movie?
-    {
-        var movie: Movie? = null
-
-        MoviesApi.retrofitService.getMovieByTitle(title.value).enqueue(
-            object: Callback<Movie> {
-                override fun onFailure(call: Call<Movie>, t: Throwable) {
-                    //findViewById<TextView>(R.id.response).text = t.message
-                }
-
-                override fun onResponse(call: Call<Movie>,
-                                        response: Response<Movie>
-                ) {
-                    movie = response.body()
-                }
-
-            }
-        )
-
-        return movie
-    }
 }

@@ -1,20 +1,25 @@
 package cz.utb.fai.ap7mt.moviesapp.ui
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import cz.utb.fai.ap7mt.moviesapp.R
 import cz.utb.fai.ap7mt.moviesapp.databinding.SearchFragmentBinding
 import cz.utb.fai.ap7mt.moviesapp.network.Movie
 import cz.utb.fai.ap7mt.moviesapp.network.MoviesApi
+import cz.utb.fai.ap7mt.moviesapp.storage.MovieRepository
+import cz.utb.fai.ap7mt.moviesapp.storage.getDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +32,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: SearchFragmentBinding
     private lateinit var viewModel: SearchViewModel
+    //private val moviesRepository = MovieRepository(getDatabase(context))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,32 +40,10 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
         binding.searchButton.setOnClickListener {
-            validateSearch()
+            val valid = validateSearch()
 
-            MoviesApi.retrofitService.getMovieByTitle(viewModel.title.value).enqueue(
-                    object: Callback<Movie> {
-                        override fun onFailure(call: Call<Movie>, t: Throwable) {
-                            Log.i("Search error", t.message?:"abc")
-                        }
-
-                        override fun onResponse(call: Call<Movie>,
-                                                response: Response<Movie>
-                        ) {
-                            val movie = response.body()
-                            if (movie != null){
-                                showMovieDetail(
-                                        movie.title,
-                                        movie.director,
-                                        movie.year,
-                                        movie.runtime,
-                                        movie.released,
-                                        movie.plot
-                                )
-                            }
-                        }
-
-                    }
-            )
+            if (valid)
+                searchForMovie(viewModel.title.value, viewModel.year.value)
         }
 
         binding.viewModel = viewModel
@@ -74,12 +58,82 @@ class SearchFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    private fun validateSearch() {
+    private fun validateSearch() : Boolean {
+        var valid = false
+
         if (viewModel.title.value == "" || viewModel.title.value == null)
             binding.titleEditLayout.error = "Title is required"
-        else
+        else {
             binding.titleEditLayout.error = null
+            valid = true
+        }
+
+        return valid
     }
+
+    private fun searchForMovie(title: String?, year: String?) {
+
+        binding.searchProgressBar.visibility = VISIBLE
+
+
+
+        if (year == "" || year == null)
+            MoviesApi.retrofitService.getMovieByTitle(title).enqueue(
+                    object: Callback<Movie> {
+                        override fun onFailure(call: Call<Movie>, t: Throwable) {
+                            Toast.makeText(context, t.message?:"Search error", LENGTH_LONG).show()
+                            binding.searchProgressBar.visibility = GONE
+                        }
+
+                        override fun onResponse(call: Call<Movie>,
+                                                response: Response<Movie>
+                        ) {
+                            binding.searchProgressBar.visibility = GONE
+                            val movie = response.body()
+                            if (movie != null && movie.response == "True"){
+                                showMovieDetail(
+                                        movie.title,
+                                        movie.director,
+                                        movie.year,
+                                        movie.runtime,
+                                        movie.released,
+                                        movie.plot
+                                )
+                            }
+                        }
+
+                    }
+            )
+        else
+            MoviesApi.retrofitService.getMovieByTitleAndYear(title, year).enqueue(
+                    object: Callback<Movie> {
+                        override fun onFailure(call: Call<Movie>, t: Throwable) {
+                            Toast.makeText(context, t.message?:"Search error", LENGTH_LONG).show()
+                            binding.searchProgressBar.visibility = GONE
+                        }
+
+                        override fun onResponse(call: Call<Movie>,
+                                                response: Response<Movie>
+                        ) {
+                            binding.searchProgressBar.visibility = GONE
+                            val movie = response.body()
+                            if (movie != null && movie.response == "True"){
+                                showMovieDetail(
+                                        movie.title,
+                                        movie.director,
+                                        movie.year,
+                                        movie.runtime,
+                                        movie.released,
+                                        movie.plot
+                                )
+                            }
+                        }
+                    }
+            )
+
+        binding.searchProgressBar.visibility = GONE
+    }
+
     private fun showMovieDetail(
             title: String,
             director: String,
