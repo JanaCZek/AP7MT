@@ -1,15 +1,22 @@
 package cz.utb.fai.ap7mt.moviesapp.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.widget.Toast
+import androidx.lifecycle.*
 import cz.utb.fai.ap7mt.moviesapp.network.Movie
 import cz.utb.fai.ap7mt.moviesapp.network.MoviesApi
+import cz.utb.fai.ap7mt.moviesapp.storage.MovieRepository
+import cz.utb.fai.ap7mt.moviesapp.storage.getDatabase
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val moviesRepository: MovieRepository by lazy {
+        MovieRepository(getDatabase(application.applicationContext))
+    }
 
     private val _title = MutableLiveData<String>()
     var title: MutableLiveData<String>
@@ -24,5 +31,112 @@ class SearchViewModel : ViewModel() {
     init {
         _title.value = ""
         _year.value = ""
+    }
+
+    fun searchMovie(errorCallback: (errorMessage: String) -> Unit, navigationCallback: (title: String,
+                                         director: String,
+                                         year: String,
+                                         runtime: String,
+                                         released: String,
+                                         plot: String) -> Unit){
+        viewModelScope.launch {
+            var movie: Movie?
+            val titleVal = requireNotNull(title.value)
+
+            movie = if (year.value == "" || year.value == null){
+                moviesRepository.getMovieByTitle(titleVal)
+            } else {
+                val yearVal = requireNotNull(year.value)
+                moviesRepository.getMovieByTitleAndYear(titleVal, yearVal)
+            }
+
+            if (movie == null)
+                apiCall(errorCallback, navigationCallback)
+            else
+                navigationCallback(
+                    movie.title,
+                    movie.director,
+                    movie.year,
+                    movie.runtime,
+                    movie.released,
+                    movie.plot
+                )
+        }
+    }
+
+    private fun apiCall(errorCallback: (errorMessage: String) -> Unit, navigationCallback: (title: String,
+                                                            director: String,
+                                                            year: String,
+                                                            runtime: String,
+                                                            released: String,
+                                                            plot: String) -> Unit) {
+        if (year.value == "" || year.value == null)
+            MoviesApi.retrofitService.getMovieByTitle(title.value).enqueue(
+                object: Callback<Movie> {
+                    override fun onFailure(call: Call<Movie>, t: Throwable) {
+                        errorCallback(t.message?:"Error in API Call")
+                    }
+
+                    override fun onResponse(call: Call<Movie>,
+                                            response: Response<Movie>
+                    ) {
+                        val movie = response.body()
+                        if (movie != null && movie.response == "True"){
+                            viewModelScope.launch {
+                                moviesRepository.insert(movie)
+                            }
+                            navigationCallback(
+                                movie.title,
+                                movie.director,
+                                movie.year,
+                                movie.runtime,
+                                movie.released,
+                                movie.plot
+                            )
+                        }
+                        else
+                            errorCallback("Response was false")
+                    }
+                }
+            )
+        else
+            MoviesApi.retrofitService.getMovieByTitleAndYear(title.value, year.value).enqueue(
+                object: Callback<Movie> {
+                    override fun onFailure(call: Call<Movie>, t: Throwable) {
+                        errorCallback(t.message?:"Error in API Call")
+                    }
+
+                    override fun onResponse(call: Call<Movie>,
+                                            response: Response<Movie>
+                    ) {
+                        val movie = response.body()
+                        if (movie != null && movie.response == "True"){
+                            viewModelScope.launch {
+                                moviesRepository.insert(movie)
+                            }
+                            navigationCallback(
+                                movie.title,
+                                movie.director,
+                                movie.year,
+                                movie.runtime,
+                                movie.released,
+                                movie.plot
+                            )
+                        }
+                        else
+                            errorCallback("Response was false")
+                    }
+                }
+            )
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return SearchViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
     }
 }

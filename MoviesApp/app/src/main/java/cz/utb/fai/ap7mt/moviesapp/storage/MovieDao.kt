@@ -1,10 +1,8 @@
 package cz.utb.fai.ap7mt.moviesapp.storage
 
-import androidx.room.Dao
-import androidx.room.Ignore
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
-import androidx.room.Query
+import java.util.*
 
 @Dao
 interface MovieDao {
@@ -12,8 +10,14 @@ interface MovieDao {
     fun getAllMovies() : List<MovieEntity>
 
     @Query("select * from movies where id=:id")
-    fun getMovieById(id: String) : MovieEntity
+    fun getMovie(id: String) : MovieEntity?
 
-    @Insert(onConflict = IGNORE)
+    @Query("select * from movies where title=:title")
+    fun getMovieByTitle(title: String) : MovieEntity?
+
+    @Query("select * from movies where title=:title and year=:year")
+    fun getMovieByTitleAndYear(title: String, year: String) : MovieEntity?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovie(movieEntity: MovieEntity)
 }
