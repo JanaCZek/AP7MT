@@ -11,4 +11,5 @@
     <string name="overviewText">Back to overview</string>
     <string name="titleFormat">%1s (%2s)</string>
     <string name="titleRequiredText">Title of movie is required</string>
+    <string name="emptyLabelText">No movies in database. Please press the Search button</string>
 </resources>
