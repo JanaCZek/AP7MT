@@ -10,8 +10,13 @@ class MovieDetailViewModel(
         director: String,
         runtime: String,
         released: String,
-        plot: String
+        plot: String,
+        errorMessage: String?
 ) : ViewModel() {
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?>
+        get() = _errorMessage
 
     private val _title = MutableLiveData<String>()
     val title: LiveData<String>
@@ -44,5 +49,6 @@ class MovieDetailViewModel(
         _runtime.value = runtime
         _released.value = released
         _plot.value = plot
+        _errorMessage.value = errorMessage
     }
 }

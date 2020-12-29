@@ -1,8 +1,11 @@
 package cz.utb.fai.ap7mt.moviesapp.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +18,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import cz.utb.fai.ap7mt.moviesapp.R
 import cz.utb.fai.ap7mt.moviesapp.databinding.OverviewFragmentBinding
 import cz.utb.fai.ap7mt.moviesapp.network.Movie
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 class OverviewFragment : Fragment() {
 
@@ -67,12 +73,13 @@ class OverviewFragment : Fragment() {
 
     private fun movieDetailFromList(movie: Movie): Unit {
         val action = OverviewFragmentDirections.actionOverviewFragmentToMovieDetailFragment(
-                movie.title,
-                movie.director,
-                movie.year,
-                movie.runtime,
-                movie.released,
-                movie.plot
+                movie.title?:"",
+                movie.director?:"",
+                movie.year?:"",
+                movie.runtime?:"",
+                movie.released?:"",
+                movie.plot?:"",
+                null
         )
         findNavController().navigate(action)
     }

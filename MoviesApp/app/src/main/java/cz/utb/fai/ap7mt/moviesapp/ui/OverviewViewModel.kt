@@ -1,6 +1,7 @@
 package cz.utb.fai.ap7mt.moviesapp.ui
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,9 @@ import androidx.navigation.fragment.findNavController
 import cz.utb.fai.ap7mt.moviesapp.storage.MovieRepository
 import cz.utb.fai.ap7mt.moviesapp.storage.getDatabase
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -21,6 +25,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     private val moviesRepository: MovieRepository by lazy {
         MovieRepository(getDatabase(application.applicationContext))
     }
+
 
     fun getMovies(adapter: MovieAdapter) {
         viewModelScope.launch {

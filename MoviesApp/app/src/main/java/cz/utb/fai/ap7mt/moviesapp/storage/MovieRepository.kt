@@ -35,13 +35,13 @@ class MovieRepository(private val database: MovieDatabase) {
     suspend fun insert(movie: Movie) {
         withContext(Dispatchers.IO) {
             val movieEntity = MovieEntity(
-                id = movie.id,
-                title = movie.title,
-                year = movie.year,
-                director = movie.director,
-                released = movie.released,
-                runtime = movie.runtime,
-                plot = movie.plot
+                id = movie.id?:"",
+                title = movie.title?:"",
+                year = movie.year?:"",
+                director = movie.director?:"",
+                released = movie.released?:"",
+                runtime = movie.runtime?:"",
+                plot = movie.plot?:""
             )
 
             database.movieDao().insertMovie(movieEntity)

@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -35,7 +37,8 @@ class MovieDetailFragment : Fragment() {
                 movieDetailArgs.director,
                 movieDetailArgs.runtime,
                 movieDetailArgs.released,
-                movieDetailArgs.plot
+                movieDetailArgs.plot,
+                movieDetailArgs.errorMessage
         )
         viewModel = ViewModelProvider(this, viewModelFactory).get(MovieDetailViewModel::class.java)
         binding.viewModel = viewModel
@@ -46,13 +49,24 @@ class MovieDetailFragment : Fragment() {
             showOverview()
         }
 
+        if (viewModel.errorMessage.value != null){
+            binding.detailLayout.visibility = GONE
+            binding.titleAndYearLabel.visibility = GONE
+            binding.detailErrorMessage.visibility = VISIBLE
+            binding.detailErrorMessage.text = viewModel.errorMessage.value
+        }
+        else {
+            binding.detailLayout.visibility = VISIBLE
+            binding.titleAndYearLabel.visibility = VISIBLE
+            binding.detailErrorMessage.visibility = GONE
+            binding.detailErrorMessage.text = ""
+        }
+
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     fun showOverview(){

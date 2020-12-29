@@ -9,11 +9,12 @@ class MovieDetailViewModelFactory(
         private val director: String,
         private val runtime: String,
         private val released: String,
-        private val plot: String
+        private val plot: String,
+        private val errorMessage: String?
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MovieDetailViewModel::class.java))
-            return MovieDetailViewModel(title, year, director, runtime, released, plot) as T
+            return MovieDetailViewModel(title, year, director, runtime, released, plot, errorMessage) as T
         else
             throw IllegalArgumentException("Unknown ViewModel class")
     }

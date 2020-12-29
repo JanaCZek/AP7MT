@@ -38,7 +38,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                          year: String,
                                          runtime: String,
                                          released: String,
-                                         plot: String) -> Unit){
+                                         plot: String,
+                                         errorMessage: String?) -> Unit){
         viewModelScope.launch {
             var movie: Movie?
             val titleVal = requireNotNull(title.value)
@@ -54,12 +55,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 apiCall(errorCallback, navigationCallback)
             else
                 navigationCallback(
-                    movie.title,
-                    movie.director,
-                    movie.year,
-                    movie.runtime,
-                    movie.released,
-                    movie.plot
+                    movie.title?:"",
+                    movie.director?:"",
+                    movie.year?:"",
+                    movie.runtime?:"",
+                    movie.released?:"",
+                    movie.plot?:"",
+                        null
                 )
         }
     }
@@ -69,7 +71,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                                             year: String,
                                                             runtime: String,
                                                             released: String,
-                                                            plot: String) -> Unit) {
+                                                            plot: String,
+                                                            errorMessage: String?) -> Unit) {
         if (year.value == "" || year.value == null)
             MoviesApi.retrofitService.getMovieByTitle(title.value).enqueue(
                 object: Callback<Movie> {
@@ -86,16 +89,25 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                 moviesRepository.insert(movie)
                             }
                             navigationCallback(
-                                movie.title,
-                                movie.director,
-                                movie.year,
-                                movie.runtime,
-                                movie.released,
-                                movie.plot
+                                movie.title?:"",
+                                movie.director?:"",
+                                movie.year?:"",
+                                movie.runtime?:"",
+                                movie.released?:"",
+                                movie.plot?:"",
+                                    null
                             )
                         }
                         else
-                            errorCallback("Response was false")
+                            navigationCallback(
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "Could not find movie. Please try again"
+                            )
                     }
                 }
             )
@@ -115,16 +127,25 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                 moviesRepository.insert(movie)
                             }
                             navigationCallback(
-                                movie.title,
-                                movie.director,
-                                movie.year,
-                                movie.runtime,
-                                movie.released,
-                                movie.plot
+                                movie.title?:"",
+                                movie.director?:"",
+                                movie.year?:"",
+                                movie.runtime?:"",
+                                movie.released?:"",
+                                movie.plot?:"",
+                                    null
                             )
                         }
                         else
-                            errorCallback("Response was false")
+                            navigationCallback(
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "Could not find movie. Please try again"
+                            )
                     }
                 }
             )

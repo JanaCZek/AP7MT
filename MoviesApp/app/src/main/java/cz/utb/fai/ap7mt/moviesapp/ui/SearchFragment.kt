@@ -87,11 +87,12 @@ class SearchFragment : Fragment() {
             year: String,
             runtime: String,
             released: String,
-            plot: String
+            plot: String,
+            errorMessage: String?
     ) {
         binding.searchProgressBar.visibility = GONE
         val action = SearchFragmentDirections.actionSearchFragmentToMovieDetailFragment(
-                title, director, year, runtime, released, plot
+                title, director, year, runtime, released, plot, errorMessage
         )
         findNavController().navigate(action)
     }
