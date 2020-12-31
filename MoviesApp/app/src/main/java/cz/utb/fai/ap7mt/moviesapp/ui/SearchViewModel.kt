@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -52,7 +53,20 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             }
 
             if (movie == null)
-                apiCall(errorCallback, navigationCallback)
+                try {
+                    apiCall(errorCallback, navigationCallback)
+                }
+                catch (e: Exception) {
+                    navigationCallback(
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            e.message
+                    )
+                }
             else
                 navigationCallback(
                     movie.title?:"",
